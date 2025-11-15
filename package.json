@@ -1,0 +1,59 @@
+{
+  "name": "react-sirius",
+  "displayName": "React Navigator",
+  "description": "",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.106.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:javascriptreact",
+    "onLanguage:typescriptreact",
+    "onLanguage:javascript",
+    "onLanguage:typescript"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "React Sirius",
+      "properties": {
+        "reactSirius.styleSearchGlobs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "**/*.{css,scss,sass,less,styl}"
+          ],
+          "description": "Patrones glob donde buscar clases de estilos (relativos a la raíz del workspace)."
+        },
+        "reactSirius.styleSearchExclude": {
+          "type": "string",
+          "default": "**/node_modules/**",
+          "description": "Patrón glob para excluir archivos/carpeta al buscar estilos."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.106.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "typescript-eslint": "^8.46.3",
+    "eslint": "^9.39.1",
+    "typescript": "^5.9.3",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^2.5.2"
+  }
+}
