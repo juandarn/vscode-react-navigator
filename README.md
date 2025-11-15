@@ -1,71 +1,37 @@
-# react-sirius README
+# CSS Pointer
 
-This is the README for your extension "react-sirius". After writing up a brief description, we recommend including the following sections.
+CSS Pointer es una extensión para Visual Studio Code que te permite:
 
-## Features
+- Ir desde `className` o `id` en tus componentes React (JS/TS/JSX/TSX)  
+  directamente a la definición en tu archivo **CSS**.
+- Ver un **hover** con el bloque CSS correspondiente al pasar el mouse sobre el
+  `className` o `id`.
+- Soporta múltiples definiciones con el mismo nombre (por ejemplo, la misma clase
+  en distintos archivos CSS):
+  - Al usar **F12 / Ctrl+Click**, VS Code te muestra todas las ubicaciones para elegir.
+  - Al hacer hover, puedes ver varios bloques CSS (hasta un máximo configurado internamente).
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+## Características
 
-For example if there is an image subfolder under your extension project workspace:
+- Soporte para:
+  - `className="chat-header"`
+  - `class="chat-header"`
+  - `id="chat-header"`
+- Búsqueda en archivos `*.css` dentro del workspace (excluyendo `node_modules`).
+- Soporte para nombres de clase e id con guiones, por ejemplo:
+  - `chat-header`
+  - `chat-container-primary`
+- Vista previa de CSS en hover:
+  - Muestra el bloque completo desde la línea del selector hasta el cierre de `}`.
+  - Cuando hay varias coincidencias, muestra varias secciones con el path del archivo.
 
-\!\[feature X\]\(images/feature-x.png\)
+## Uso
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+1. Instala la extensión en VS Code.
+2. Abre un proyecto React (JavaScript o TypeScript) con archivos CSS.
+3. En tu JSX/TSX, por ejemplo:
 
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+   ```tsx
+   <div className="chat-header">
+     ...
+   </div>
