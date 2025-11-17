@@ -10,7 +10,6 @@ interface UsageInfo {
   props: string[];
 }
 
-// cache en memoria de props conocidas por componente
 const componentPropsCache = new Map<string, string[]>();
 
 export function registerReactPropSync(context: vscode.ExtensionContext) {
@@ -26,7 +25,6 @@ export function registerReactPropSync(context: vscode.ExtensionContext) {
       return;
     }
 
-    // 1) Definición -> usos (def es fuente de verdad para add + delete)
     const components = getComponentsInDocument(doc);
     if (components.length) {
       for (const c of components) {
@@ -35,9 +33,7 @@ export function registerReactPropSync(context: vscode.ExtensionContext) {
         }
 
         const prevProps = componentPropsCache.get(c.name) || [];
-        const removedProps = prevProps.filter(
-          (p) => !c.props.includes(p)
-        );
+        const removedProps = prevProps.filter((p) => !c.props.includes(p));
 
         // actualizamos cache con la nueva firma
         componentPropsCache.set(c.name, c.props);
@@ -87,7 +83,6 @@ function getComponentsInDocument(
   const components: ComponentInfo[] = [];
   let match: RegExpExecArray | null;
 
-  // funciones normales
   const fnRegex =
     /(?:export\s+default\s+|export\s+)?function\s+([A-Z][A-Za-z0-9_]*)\s*\(\s*{([^}]*)}\s*\)/g;
 
@@ -105,7 +100,6 @@ function getComponentsInDocument(
     components.push({ name, props });
   }
 
-  // arrow functions
   const arrowRegex =
     /(?:export\s+default\s+|export\s+)?(?:const|let)\s+([A-Z][A-Za-z0-9_]*)\s*=\s*\(\s*{([^}]*)}\s*\)\s*=>/g;
 
@@ -233,8 +227,7 @@ async function syncDefinitionFromUsage(usage: UsageInfo): Promise<void> {
   const allProps = Array.from(allPropsSet);
 
   const sameLength = allProps.length === defProps.length;
-  const sameContent =
-    sameLength && defProps.every((p, i) => p === allProps[i]);
+  const sameContent = sameLength && defProps.every((p, i) => p === allProps[i]);
 
   if (sameContent) {
     return;
@@ -284,7 +277,7 @@ async function syncDefinitionFromUsage(usage: UsageInfo): Promise<void> {
 
 interface ParsedAttr {
   name: string | null; // null para cosas tipo `{...rest}` o chunks raros
-  text: string;        // texto completo del atributo incluyendo espacios iniciales
+  text: string; // texto completo del atributo incluyendo espacios iniciales
 }
 
 function parseJsxAttributes(attrs: string): ParsedAttr[] {
@@ -296,7 +289,9 @@ function parseJsxAttributes(attrs: string): ParsedAttr[] {
     let start = i;
 
     // incluir espacios iniciales en el atributo
-    while (i < n && /\s/.test(attrs[i])) i++;
+    while (i < n && /\s/.test(attrs[i])) {
+      i++;
+    }
     if (i >= n) {
       break;
     }
@@ -307,8 +302,9 @@ function parseJsxAttributes(attrs: string): ParsedAttr[] {
       const exprStart = i;
       while (i < n) {
         const c = attrs[i];
-        if (c === "{") depth++;
-        else if (c === "}") {
+        if (c === "{") {
+          depth++;
+        } else if (c === "}") {
           depth--;
           if (depth === 0) {
             i++;
@@ -326,7 +322,9 @@ function parseJsxAttributes(attrs: string): ParsedAttr[] {
 
     // si no es letra/underscore -> chunk raro, lo dejamos tal cual
     if (!/[A-Za-z_$]/.test(first)) {
-      while (i < n && !/\s/.test(attrs[i])) i++;
+      while (i < n && !/\s/.test(attrs[i])) {
+        i++;
+      }
       const text = attrs.slice(start, i);
       res.push({ name: null, text });
       continue;
@@ -334,11 +332,15 @@ function parseJsxAttributes(attrs: string): ParsedAttr[] {
 
     // nombre del atributo
     const nameStart = i;
-    while (i < n && /[A-Za-z0-9_$]/.test(attrs[i])) i++;
+    while (i < n && /[A-Za-z0-9_$]/.test(attrs[i])) {
+      i++;
+    }
     const name = attrs.slice(nameStart, i);
 
     // espacios después del nombre
-    while (i < n && /\s/.test(attrs[i])) i++;
+    while (i < n && /\s/.test(attrs[i])) {
+      i++;
+    }
 
     // boolean prop sin '='
     if (i >= n || attrs[i] !== "=") {
@@ -349,7 +351,9 @@ function parseJsxAttributes(attrs: string): ParsedAttr[] {
 
     // hay '='
     i++; // skip '='
-    while (i < n && /\s/.test(attrs[i])) i++;
+    while (i < n && /\s/.test(attrs[i])) {
+      i++;
+    }
     if (i >= n) {
       const text = attrs.slice(start, i);
       res.push({ name, text });
@@ -364,8 +368,9 @@ function parseJsxAttributes(attrs: string): ParsedAttr[] {
       let depth = 0;
       while (i < n) {
         const c = attrs[i];
-        if (c === "{") depth++;
-        else if (c === "}") {
+        if (c === "{") {
+          depth++;
+        } else if (c === "}") {
           depth--;
           if (depth === 0) {
             i++;
@@ -469,9 +474,7 @@ async function syncComponentPropsUsages(
       }
 
       const newAttrs = newParts.join("");
-      const newFull = `<${componentName}${newAttrs}${
-        selfClosing ? "/>" : ">"
-      }`;
+      const newFull = `<${componentName}${newAttrs}${selfClosing ? "/>" : ">"}`;
 
       const startOffset = match.index!;
       const endOffset = startOffset + fullMatch.length;
